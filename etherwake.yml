@@ -1,0 +1,25 @@
+# Use this code to send out magic packets that will wake up your desired systems. In my case, I used this code to wake up Windows servers. 
+# Remember to configure your Windows servers and BIOS to allow WOL 
+# This code was used within a Centos 8 OS. 
+# I first installed net-tools using yum install net-tools. You must install the package in order to use this code. 
+
+
+---
+- name: Wake up Servers
+  hosts: localhost
+  tasks:
+    - name: Wake up server 1
+      ansible.builtin.command:
+              ether-wake {SERVER MAC ADDRESS}
+    - name: Wake up server 2
+      ansible.builtin.command:
+              ether-wake {SERVER MAC ADDRESS}
+    - name: Wake up server 3
+      ansible.builtin.command:
+              ether-wake {SERVER MAC ADDRESS}
+    - name: Wake up server 4 
+      ansible.builtin.command:
+              ether-wake {SERVER MAC ADDRESS}
+    - name: Wake up server 5 
+      ansible.builtin.command:
+              ether-wake {SERVER MAC ADDRESS}

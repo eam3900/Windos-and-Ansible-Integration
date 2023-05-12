@@ -1,0 +1,27 @@
+## This code will gather the state of all vm's to veirfy that they are turned on. 
+## If you wish to only target a select few VM's, simply change the $vmList to your desired list. 
+## If the VM's are turned off the script will turn them on and send out a message that they have been turned on. 
+## This code uses a powrshell script within the YAML file
+---
+- name: Check and power on virtual machines
+  hosts: {{your target machine}}
+  gather_facts: no
+
+  tasks:
+    - name: Run PowerShell script
+      win_shell: |
+        # Get a list of all virtual machines
+        $vmList = Get-VM | Select-Object -ExpandProperty Name
+
+        # Go through each VM in the list
+        foreach ($vm in $vmList) {
+            # Check if the VM is powered on
+            $status = Get-VM -Name $vm | Select-Object -ExpandProperty State
+            if ($status -eq "Off") {
+                # If the VM is off, turn it on
+                Start-VM -Name $vm
+                Write-Host "$vm was powered on"
+            } else {
+                Write-Host "$vm is already powered on"
+            }
+        }

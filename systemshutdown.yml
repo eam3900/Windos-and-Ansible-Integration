@@ -1,0 +1,9 @@
+## Use this code to shutdown a windows system unconditionally. This code works by providing a shell where you can enter a windows command.
+## In our case the command we used to shut down the windows seervers is "shutdown /s"
+---
+- name: unconditionally shutdown windows server
+  hosts: {your target machine}
+  tasks:
+    - name: windows shutdown
+      ansible.windows.win_command:
+        cmd: shutdown /s

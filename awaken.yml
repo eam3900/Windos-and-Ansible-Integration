@@ -1,0 +1,22 @@
+
+## This playbook will check win_ping connection and trigger etherwake.yml if connection fails. If etherwake is triggered, then it will also trigger vmverificationto ensure that the unvm's within the domain controllers are powered on.
+---
+ - name: Win_ping connection check
+   hosts: domain_controllers, innosoft
+   gather_facts: no
+   tasks:
+     - name: Check Win_ping connection
+       win_ping:
+       ignore_unreachable: true
+       register: ping_result
+     - name: Trigger playbook if connection fails
+       block:
+         - ansible.builtin.shell: ansible-playbook etherwake.yml
+       when: ping_result.ping is not defined or ping_result.ping == 'FAILED'
+       delegate_to: localhost
+     - name: check and power on vm's
+       block:
+         - ansible.builtin.shell: ansible-playbook vmverification.yml
+       when: ping_result.ping is not defined or ping_result.ping == 'FAILED'
+       delegate_to: localhost
+

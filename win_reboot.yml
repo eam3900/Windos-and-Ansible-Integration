@@ -1,0 +1,12 @@
+## Use this code to reboot your windows systems
+---
+- name: Windows Reboot Playbook
+  hosts: {{ your target machines }}
+  become: true
+  gather_facts: false
+  tasks:
+    - name: reboot host(s)
+      ansible.windows.win_reboot:
+        msg: "reboot initiated by your friendly Ansible server"
+        pre_reboot_delay: 5
+        post_reboot_delay: 10

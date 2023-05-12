@@ -1,0 +1,44 @@
+## Use this code to update your windows systems
+## This code will check for updates, reboot 3 times, and log the results.
+---
+- name: Windows Update Playbook
+  hosts: {{ your target machines }}
+  tasks:
+    - name: Install windows updates
+      ansible.windows.win_updates:
+        category_names: '*'
+        reboot: yes
+    - name: First Reboot
+      ansible.windows.win_reboot:
+        reboot_timeout: 300
+    - name: Check for updates
+      ansible.windows.win_updates:
+        category_names: '*'
+        state: installed
+        reboot: yes
+        log_path: C:\ansible_searched_updates.txt
+    - name: Download all windows updates
+      ansible.windows.win_updates:
+        category_names: '*'
+        state: downloaded
+        reboot: yes
+        log_path: C:\ansible_downloaded_updates.txt
+    - name: Install all windows updates
+      ansible.windows.win_updates:
+        category_names: '*'
+        state: searched
+        reboot: yes
+        log_path: C:\ansible_installed_updates.txt
+    - name: install windows upgrades
+      ansible.windows.win_updates:
+        category_names: upgrades
+        reboot: yes
+        log_path: C:\ansible_upgrades.txt
+    - name: Second reboot
+      ansible.windows.win_reboot:
+        msg: "Reboot initiated by your friendly Ansible server"
+        reboot_timeout: 300
+    - name: Third Reboot
+      ansible.windows.win_reboot:
+        msg: "Reboot initiated by your friendly Ansible server"
+        reboot_timeout: 300
